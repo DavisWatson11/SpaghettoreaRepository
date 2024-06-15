@@ -1,0 +1,277 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ToppingStationScript : MonoBehaviour
+{
+    public SpriteRenderer PastaSprite;          // the sprite of the pasta game object
+    public SpriteRenderer SauceSprite;          // the sprite of the sauce game object
+    public SpriteRenderer T1Sprite;             // the sprite of the toppings
+    public SpriteRenderer T2Sprite;             // the sprite of the toppings
+    public SpriteRenderer T3Sprite;             // the sprite of the toppings
+
+    [SerializeField] Sprite undercookedPasta;       // sprite of the cooked pasta variations
+    [SerializeField] Sprite perfectPasta;
+    [SerializeField] Sprite overcookedPasta;
+
+    [SerializeField] Sprite marinaraSauce;          // sprites for the sauce variations
+    [SerializeField] Sprite cheeseSauce;
+    [SerializeField] Sprite pestoSauce;
+    [SerializeField] Sprite meatSauce;
+    [SerializeField] Sprite spicySauce;
+    [SerializeField] Sprite alfredoSauce;
+
+    [SerializeField] Sprite meatBall;               // sprites for the topping variations
+    [SerializeField] Sprite vmeatBall;
+    [SerializeField] Sprite parmCheese;
+
+    public GameObject marinaraButton;               // sauce button game objects
+    public GameObject cheeseButton;
+    public GameObject pestoButton;
+    public GameObject meatButton;
+    public GameObject spicyButton;
+    public GameObject alfredoButton;
+
+    public GameObject meatBallButton;               // topping button game objects
+    public GameObject vmeatBallButton;
+    public GameObject parmCheeseButton;
+
+    static bool SauceChosen = false;                // true if the user chose sauce, false if not
+    static int ToppingsChosen = 0;                  // keeps track of how many sauces were chosen
+
+    public void PrintPasta()                        // this function prints the pasta image
+    {
+        switch (OrderGenerator.MealCooked)              // print the pasta type
+        {
+            case OrderGenerator.MenuCooked.overcooked: 
+                PastaSprite.sprite = overcookedPasta;
+                break;
+            case OrderGenerator.MenuCooked.undercooked:
+                PastaSprite.sprite = undercookedPasta;
+                break;
+            case OrderGenerator.MenuCooked.perfect:
+                PastaSprite.sprite = perfectPasta;
+                break;
+        }
+
+        if (SauceChosen)            // if the user chose sauce
+        {
+            Debug.Log("Printing Sauce");        // for testing purposes
+            switch (OrderGenerator.MealSauce)           // print the sauce that was chosen
+            {
+                case OrderGenerator.MenuSauce.tomato:
+                    SauceSprite.sprite = marinaraSauce;
+                    Debug.Log("Tomato");
+                    break;
+                case OrderGenerator.MenuSauce.cheese:
+                    SauceSprite.sprite = cheeseSauce;
+                    break;
+                case OrderGenerator.MenuSauce.pesto:
+                    SauceSprite.sprite = pestoSauce;
+                    break;
+                case OrderGenerator.MenuSauce.meatsauce:
+                    SauceSprite.sprite = meatSauce;
+                    break;
+                case OrderGenerator.MenuSauce.spicy:
+                    SauceSprite.sprite = spicySauce;
+                    break;
+                case OrderGenerator.MenuSauce.alfredo:
+                    SauceSprite.sprite = alfredoSauce;
+                    break;
+            }
+        }
+
+        if (OrderGenerator.MTopping1Exists)         
+        {
+            switch (OrderGenerator.MealToppings1)                   // print the topping image
+            {
+                case OrderGenerator.MenuToppings.meatball:
+                    T1Sprite.sprite = meatBall;
+                    break;
+                case OrderGenerator.MenuToppings.vmeatball:
+                    T1Sprite.sprite = vmeatBall;
+                    break;
+                case OrderGenerator.MenuToppings.cheese:
+                    T1Sprite.sprite = parmCheese;
+                    break;
+            }
+        }
+
+        if (OrderGenerator.MTopping2Exists)                     // print the topping image
+        {
+            switch (OrderGenerator.MealToppings2)
+            {
+                case OrderGenerator.MenuToppings.meatball:
+                    T2Sprite.sprite = meatBall;
+                    break;
+                case OrderGenerator.MenuToppings.vmeatball:
+                    T2Sprite.sprite = vmeatBall;
+                    break;
+                case OrderGenerator.MenuToppings.cheese:
+                    T2Sprite.sprite = parmCheese;
+                    break;
+            }
+        }
+
+        if (OrderGenerator.MTopping3Exists)                     // print the topping image
+        {
+            switch (OrderGenerator.MealToppings3)
+            {
+                case OrderGenerator.MenuToppings.meatball:
+                    T3Sprite.sprite = meatBall;
+                    break;
+                case OrderGenerator.MenuToppings.vmeatball:
+                    T3Sprite.sprite = vmeatBall;
+                    break;
+                case OrderGenerator.MenuToppings.cheese:
+                    T3Sprite.sprite = parmCheese;
+                    break;
+            }
+        }
+    }
+
+    public void TomatoSauceSelection()          // script executed when the tomato sauce button is clicked
+    {
+        OrderGenerator.MealSauce = OrderGenerator.MenuSauce.tomato;         // update the chosen sauce
+        SauceChosen = true;             // sauce chosen
+        marinaraButton.SetActive(false);            // set buttons to disabled
+        cheeseButton.SetActive(false);
+        pestoButton.SetActive(false);
+        meatButton.SetActive(false);
+        spicyButton.SetActive(false);
+        alfredoButton.SetActive(false);
+    }
+
+    public void CheeseSauceSelection()      // script executed when the cheese sauce button is clicked
+    {
+        OrderGenerator.MealSauce = OrderGenerator.MenuSauce.cheese;         // update chosen sauce
+        SauceChosen = true;             // sauce chosen
+        marinaraButton.SetActive(false);            // set buttons to disabled
+        cheeseButton.SetActive(false);
+        pestoButton.SetActive(false);
+        meatButton.SetActive(false);
+        spicyButton.SetActive(false);
+        alfredoButton.SetActive(false);
+    }
+
+    public void PestoSauceSelection()           // script executed when the pesto sauce button is clicked
+    {
+        OrderGenerator.MealSauce = OrderGenerator.MenuSauce.pesto;          // update chosen sauce
+        SauceChosen = true;                         // sauce chosen
+        marinaraButton.SetActive(false);                // set buttons to disabled
+        cheeseButton.SetActive(false);
+        pestoButton.SetActive(false);
+        meatButton.SetActive(false);
+        spicyButton.SetActive(false);
+        alfredoButton.SetActive(false);
+    }
+
+    public void MeatSauceSelection()            // script executed when the meat sauce button is clicked
+    {
+        OrderGenerator.MealSauce = OrderGenerator.MenuSauce.meatsauce;          // update chosen sauce
+        SauceChosen = true;             // sauce chosen
+        marinaraButton.SetActive(false);                    // set buttons to disabled
+        cheeseButton.SetActive(false);
+        pestoButton.SetActive(false);
+        meatButton.SetActive(false);
+        spicyButton.SetActive(false);
+        alfredoButton.SetActive(false);
+    }
+
+    public void AlfredoSauceSelection()             // script executed when the alfredo sauce button is clicked
+    {
+        OrderGenerator.MealSauce = OrderGenerator.MenuSauce.alfredo;            // update chosen sauce
+        SauceChosen = true;             // sauce chosen
+        marinaraButton.SetActive(false);                    // set buttons to disabled
+        cheeseButton.SetActive(false);
+        pestoButton.SetActive(false);
+        meatButton.SetActive(false);
+        spicyButton.SetActive(false);
+        alfredoButton.SetActive(false);
+    }
+
+    public void SpicySauceSelection()               // script executed when the spicy sauce button is clicked
+    {
+        OrderGenerator.MealSauce = OrderGenerator.MenuSauce.spicy;              // update chosen sauce
+        SauceChosen = true;             // sauce chosen
+        marinaraButton.SetActive(false);                    // set buttons to disabled
+        cheeseButton.SetActive(false);
+        pestoButton.SetActive(false);
+        meatButton.SetActive(false);
+        spicyButton.SetActive(false);
+        alfredoButton.SetActive(false);
+    }
+
+    public void MeatballSelection()             // script executed when meatball is chosen
+    {
+        switch (ToppingsChosen)             // what topping number is this (1-3)
+        {
+            case 0:
+                OrderGenerator.MealToppings1 = OrderGenerator.MenuToppings.meatball;                // set topping values
+                ToppingsChosen++;           // add another topping chose
+                OrderGenerator.MTopping1Exists = true;          // update value
+                break;
+            case 1:
+                OrderGenerator.MealToppings2 = OrderGenerator.MenuToppings.meatball;                // set topping values
+                ToppingsChosen++;           // add another topping chose
+                OrderGenerator.MTopping2Exists = true;              // update value
+                break;
+            case 2:
+                OrderGenerator.MealToppings3 = OrderGenerator.MenuToppings.meatball;            // set topping values
+                meatBallButton.SetActive(false);                        // since last topping choice, set buttons to disabled
+                vmeatBallButton.SetActive(false);
+                parmCheeseButton.SetActive(false);
+                OrderGenerator.MTopping3Exists = true;
+                break;
+        }
+    }
+
+    public void VMeatballSelection()                // script executed when vegan meatball is chosen
+    {
+        switch (ToppingsChosen)                     // number of toppings chosen
+        {
+            case 0:
+                OrderGenerator.MealToppings1 = OrderGenerator.MenuToppings.vmeatball;       // set topping values
+                ToppingsChosen++;                   // add another topping chosen
+                OrderGenerator.MTopping1Exists = true;              // update value
+                break;
+            case 1:
+                OrderGenerator.MealToppings2 = OrderGenerator.MenuToppings.vmeatball;           // set topping values
+                ToppingsChosen++;               // add another topping chosen
+                OrderGenerator.MTopping2Exists = true;              // update values
+                break;
+            case 2:
+                OrderGenerator.MealToppings3 = OrderGenerator.MenuToppings.vmeatball;           // set topping values
+                meatBallButton.SetActive(false);                        // disable buttons since last topping choice
+                vmeatBallButton.SetActive(false);
+                parmCheeseButton.SetActive(false);
+                OrderGenerator.MTopping3Exists = true;
+                break;
+        }
+    }
+
+    public void ParmSelection()             // script executed when cheese is selected
+    {
+        switch (ToppingsChosen)                 // topping number chosen
+        {
+            case 0:
+                OrderGenerator.MealToppings1 = OrderGenerator.MenuToppings.cheese;          // set topping value
+                ToppingsChosen++;           // add another topping chosen
+                OrderGenerator.MTopping1Exists = true;              // update values
+                break;
+            case 1:
+                OrderGenerator.MealToppings2 = OrderGenerator.MenuToppings.cheese;          // set topping value
+                ToppingsChosen++;           // // add another topping chosen
+                OrderGenerator.MTopping2Exists = true;          // update values
+                break;
+            case 2:
+                OrderGenerator.MealToppings3 = OrderGenerator.MenuToppings.cheese;      // set topping value
+                meatBallButton.SetActive(false);                // since last topping, disable buttons
+                vmeatBallButton.SetActive(false);
+                parmCheeseButton.SetActive(false);
+                OrderGenerator.MTopping3Exists = true;
+                break;
+        }
+    }
+
+}
