@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CustomerDelete : MonoBehaviour
+{
+   public GameObject DeleteCollider;                  // Game object for the collider being deleted
+   void OnCollisionEnter2D(Collision2D collision)        // function executed when collision occurs
+   {
+        Destroy(collision.gameObject);                // destroys the colliding game object
+        DeleteCollider.SetActive(false);              // deactivate the collider
+   }
+}
