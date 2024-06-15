@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CustomerSpawner : MonoBehaviour
+{
+    public GameObject Customer;         // customer prefab
+
+    void Start()            // function executed at start
+    {
+        Instantiate(Customer, transform.position, transform.rotation);          // instantiate new customer
+    }//start
+}
