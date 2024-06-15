@@ -1,0 +1,127 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class ButtonScript : MonoBehaviour
+{
+    public GameObject TicketButton;             // game object for the ticket button
+    public GameObject ContinueButton;           // game object for the continue button
+    public GameObject CustomerOrderButton;      // game object for the customer order button
+    public GameObject TicketDisplay;            // game object for the display of the ticket
+    public GameObject TakeOrderCanvas;          // game object for the taking order canvas
+    public GameObject deleteCustCollider;       // customer collider game objects to be deleted
+    public GameObject deleteCustCollider2;
+    public GameObject deleteCustCollider3;
+    public GameObject deleteCustCollider4;
+    public GameObject deleteCustCollider5;
+    public GameObject pos2;                     // the positions where the customer stops at 
+    public GameObject pos3;
+    public GameObject pos4;
+    public GameObject pos5;
+    public GameObject pos6;
+    private bool TicketShown;               // true if the ticket is being shown
+    public static int HowmanyTickets;       // keeps track of how many tickets there are 
+    public GameObject MenuButton;           // game object for the menu button
+
+    void Awake()        // function executed before start
+    {
+        HowmanyTickets = 0;         // initialize starting variables
+        TicketShown = false;
+    }
+
+    public void GoToTicket()        // goes to ticket display
+    {
+        ContinueButton.SetActive(false);
+        TicketButton.SetActive(false);
+        TicketDisplay.SetActive(true);      
+    }
+
+    public void PrintTicket()       // prints the ticket/deletes it when commanded
+    {
+        if (!TicketShown)           // if ticket is NOT being displayed
+        {
+            TicketDisplay.SetActive(true);
+            TicketShown = true;
+        }
+        else
+        {
+            TicketDisplay.SetActive(false);
+            TicketShown = false;
+        }
+    }
+
+    public void DeactivateTakeOrder()       // deactivates the take order canvas
+    {
+        TakeOrderCanvas.SetActive(false);
+    }
+
+    public void DeleteCustomerCollider()
+    {
+        deleteCustCollider.SetActive(true);
+        if (pos2.active)                // check which position is active and then remove the collider stopping the customers movement
+        {
+            pos2.SetActive(false);  
+            deleteCustCollider2.SetActive(true);
+        }
+        if (pos3.active)
+        {
+            pos3.SetActive(false);
+            deleteCustCollider3.SetActive(true);
+        }
+        if (pos4.active)
+        {
+            pos4.SetActive(false);
+            deleteCustCollider4.SetActive(true);
+        }
+        if (pos5.active)
+        {
+            pos5.SetActive(false);
+            deleteCustCollider5.SetActive(true);
+        }
+    }
+
+    public void DeactivateOrderButton()         // deactivate the order button
+    {
+        CustomerOrderButton.SetActive(false);
+    }
+
+    public void ContinueButtonActivations()         // keeps track of what the continue button does
+    {
+        switch (MoveCamera.HowManyChanges)
+        {
+            case 0: //Ticket to Cook station
+                TicketButton.SetActive(true);
+                TicketDisplay.SetActive(false);
+                ContinueButton.SetActive(true);
+                break;
+            case 1: //Cook to Topping station
+                TicketButton.SetActive(true);
+                ContinueButton.SetActive(true);
+                break;
+            case 2: //Topping to Serve station
+                TicketButton.SetActive(false);
+                TicketDisplay.SetActive(false);
+                ContinueButton.SetActive(false);
+                break;
+            case 3: //Serve to Order station
+                TicketButton.SetActive(false);
+                TicketDisplay.SetActive(false);
+                ContinueButton.SetActive(false);
+                break;
+        }
+    }
+
+    public void BackToMenuButton()              // executed when the back to menu button is pressed
+    {
+        Debug.Log("Back to Menu");
+        MoveCamera.HowManyChanges = 0;
+        SceneManager.LoadScene("Menu Screen");          // load the main menu screen
+    }
+
+    public void BellRing()          // occurs when the bell us rung
+    {
+        Debug.Log("Bell Ring");
+        MenuButton.SetActive(true);         // sets the back to menu button active
+    }
+}
