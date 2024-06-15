@@ -1,0 +1,71 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+public class PotScript : MonoBehaviour, IDropHandler
+{
+    public GameObject Spaghetti;            // game object for the spaghetti
+    public GameObject Fettuccine;           // game object for the fettuccine
+    public GameObject SpagCanvas;           // the canvas the spaghetti is attatched to
+    public GameObject FetCanvas;            // the canvas the fettuccine is attatched to
+    public GameObject SpagAnchor;           // the background anchor for the spaghetti
+    public GameObject FetAnchor;            // the background anchor for the fettuccine
+    public AudioClip Sizzle;            // plays sizzle sound when ran
+    public GameObject Blocker;              // blocks the pasta from being dragged
+    public AudioSource Source;              // the audio source of the sound
+    public static bool InPot;             // true if spaghetti is already in pot
+    public static bool cookTimerStart = false;          // true when pasta is put in the pot
+    [SerializeField] GameObject spagScooper;            // the object from spaghetti scooper
+    public Image SpagImage;                             // the image for the spaghetti
+    public Image FetImage;                              // the image for the fettuccine
+
+    public enum LevelCooked {overcooked, undercooked, perfect}; // an enum type that tells whether pasta is over, under, or perfectly cooked
+    public static LevelCooked CookedType;              // a variable of type LevelCooked
+
+    public enum PastaType {spaghetti, fettuccine, none}     // an enum type of the different pasta types (incase there are more later)
+    public static PastaType PastaInPot = PastaType.none;        // initialize starting value
+
+    private Vector3 newPosition;                    // the new instantiated position 
+    public void Start()         // executed at start
+    {
+        InPot = false;              // initialize values
+        newPosition.x = 0;
+        newPosition.y = 0;
+        newPosition.z = 0;
+    }
+    public void OnDrop(PointerEventData eventData)          // executed when the dragged object is dropped
+    {
+        Debug.Log("Dropped");       
+        if (eventData.pointerDrag != null && !InPot)            
+        {
+            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition * 1.5f;       // locks the pasta into the pot
+
+            switch (PastaInPot)                 // switch incase we add other pastas in the future
+            {
+                case PastaType.spaghetti:
+                    OrderGenerator.MealPasta = OrderGenerator.MenuPastaType.spaghetti;      // update values
+                    Debug.Log("Spagggggg")
+                    SpagImage.transform.position = SpagAnchor.transform.position;       // reset spaghetti to original position
+                    break;
+                case PastaType.fettuccine:
+                    OrderGenerator.MealPasta = OrderGenerator.MenuPastaType.fetuccini;          // update values
+                    Debug.Log("Fettttttt");
+                    FetImage.transform.position = FetAnchor.transform.position;         // reset fettuccine to original position
+                    break;
+            }
+            InPot = true;                       // update values
+            Source.PlayOneShot(Sizzle);         // play sizzle sound
+            cookTimerStart = true;              // start cook timer
+            spagScooper.SetActive(true);
+            Blocker.SetActive(true);
+        }
+    }
+
+    public void Update()        // occurs every frame
+    {
+        if (cookTimerStart)             // if cook timer started, increase the total cook time of the pasta
+            TimerScript.totalCookTime += Time.deltaTime;
+    }
+}
