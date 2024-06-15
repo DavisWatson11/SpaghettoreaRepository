@@ -1,0 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DeleteCustomerPos : MonoBehaviour
+{
+    public GameObject Customer;         // customer prefab
+    public GameObject DeleteCollider;     // the collider being "deleted" (deactivated)
+    void OnCollisionEnter2D(Collision2D collision)          // function executed when collision occurs
+    {
+        Destroy(collision.gameObject);          // destroy the colliding object
+        DeleteCollider.SetActive(false);            // deactivate the collider
+        Instantiate(Customer, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);      // instantiate new customer
+    }
+}
