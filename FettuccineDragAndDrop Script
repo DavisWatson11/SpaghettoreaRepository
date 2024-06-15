@@ -1,0 +1,60 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Runtime.CompilerServices;
+
+public class FettuccineDragAndDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler
+{
+    private RectTransform rectTransform;                // the recttransform of the image
+    public Image image;                                 // the image being dragged
+    public GameObject LockPosition;                     // not being used currently
+    private CanvasGroup canvasGroup;                    // the canvas group of the image being dragged
+    public Canvas canvas;                               // the canvas the image is apart of
+
+    private void Awake()                    // executed before start
+    {
+        rectTransform = GetComponent<RectTransform>();      // get the components
+        canvasGroup = GetComponent<CanvasGroup>();
+    }
+    public void OnBeginDrag(PointerEventData eventData)             // executed when drag is started
+    {
+        // Makes transparent
+        // image.color = new Color32(255, 255, 255, 170);
+        canvasGroup.blocksRaycasts = false;             // change colour and transparency 
+        canvasGroup.alpha = 0.75f;
+        LockPosition.SetActive(true);
+        PotScript.PastaInPot = PotScript.PastaType.fettuccine;          // tell the computer what pasta is being cooked
+        Debug.Log("Set to Fet");            // for testing purposes
+    }
+
+    public void OnDrag(PointerEventData eventData)          // when the image is dragged
+    {
+        rectTransform.anchoredPosition += eventData.delta * canvas.scaleFactor;         // moves the image
+        // or
+        // transform.position = Input.mousePosition;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)           // when the drag is stopped
+    {
+        // default colour
+        //  image.color = new Color32(255, 255, 255, 255);
+        canvasGroup.blocksRaycasts = true;      // reset colour and transparency
+        canvasGroup.alpha = 1f;
+        LockPosition.SetActive(false);
+        PotScript.PastaInPot = PotScript.PastaType.fettuccine;              // update values in the pot
+        Debug.Log("Set to Fet");            // for testing
+    }
+
+    public void OnPointerDown(PointerEventData eventData)           // when mouse is clicked on the object
+    {
+        Debug.Log("Pointer Down");              // for testing purposes
+    }
+
+    public void OnDrop(PointerEventData eventData)                  // when the image is dropped
+    {
+        Debug.Log("On Drop");                   // for testing purposes
+        LockPosition.SetActive(false);
+    }
+}
