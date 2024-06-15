@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Runtime.CompilerServices;
+
+public class NoodleDragAndDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler
+{
+    private RectTransform rectTransform;            // the recttransform of the image
+    public static Image image;                      // the image being dragged
+    public GameObject LockPosition;                 // the position the object gets locked to when not in the right spot (scrapped the idea for time purpose)
+    private CanvasGroup canvasGroup;                // the canvasGroup taken to change colour of image 
+    public Canvas canvas;                           // the canvas the image is tied to
+
+    private void Awake()                        // gets executed before the start function
+    {
+        rectTransform = GetComponent<RectTransform>();          // get the recttransform component
+        canvasGroup = GetComponent<CanvasGroup>();              // get the canvas group component
+    }
+    public void OnBeginDrag(PointerEventData eventData)     // functiong gets executed when drag is started
+    {
+        canvasGroup.blocksRaycasts = false;                 // change the colour and visibility of the image being dragged
+        canvasGroup.alpha = 0.75f;
+        LockPosition.SetActive(true);                       // not being used anymore
+        PotScript.PastaInPot = PotScript.PastaType.spaghetti;           // tell the computer that the pasta being cooked is spaghetti
+    }
+
+    public void OnDrag(PointerEventData eventData)          // funciton gets executed when object is being dragged
+    {
+        rectTransform.anchoredPosition += eventData.delta * canvas.scaleFactor;             // update position of dragged object + multiply it by canvas.scaleFactor 
+    }
+
+    public void OnEndDrag(PointerEventData eventData)           // when object has stopped being dragged
+    {
+        canvasGroup.blocksRaycasts = true;          // set the visibility and colour
+        canvasGroup.alpha = 1f;
+        LockPosition.SetActive(false);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)           // executed when mouse is clicked on the image
+    {
+        Debug.Log("Pointer Down");          // for testing purposes
+    }
+
+    public void OnDrop(PointerEventData eventData)              // executed when image is dropped
+    {
+        Debug.Log("On Drop");                                   // for testing purposes
+        LockPosition.SetActive(false);                             // not being used anymore
+    }
+}
