@@ -1,0 +1,378 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using UnityEngine;
+using System.Threading.Tasks; //For wait function
+using TMPro; //For text
+
+public class OrderGenerator : MonoBehaviour
+{
+    public enum MenuCooked { overcooked, undercooked, perfect };                     // how the customer wants their food cooked
+    public enum MenuPastaType { spaghetti, fetuccini };                              // what kind of pasta the customer wants
+    public enum MenuSauce { tomato, cheese, pesto, meatsauce, alfredo, spicy };      // what kind of sauce the customer wants
+    public enum MenuToppings { cheese, meatball, vmeatball, none };                 //Topping options
+    public static int points;                                                       //How many points a user gets on their meal
+    public TMP_Text Final_score;                                                    //Text output for points
+
+    public Sprite SpagPicture;      //Spaghetti pic
+    public Sprite FetPicture;       //Fetticine pic
+    public Sprite TomatoPicture;    //Tomato pic
+    public Sprite CheesePicture;    //Cheese pic
+    public Sprite PestoPicture;     //Pesto pic
+    public Sprite MeatPicture;      //Meat sauce pic
+    public Sprite AlfPicture;       //Alfredo pic
+    public Sprite SpicyPicture;     //Spicy sauce pic
+    public Sprite ParmPicture;      //Parmeasan pic
+    public Sprite MeatballPicture;  //Meatball pic
+    public Sprite VmeatballPicture; //Vegan meatball pic
+
+    public SpriteRenderer pastaType;  //Pasta sprite renderer
+    public SpriteRenderer sauceType;  //sauce sprite renderer
+    public SpriteRenderer T1Type;      //Topping1 sprite renderer
+    public SpriteRenderer T2Type;       //Topping2 sprite renderer
+    public SpriteRenderer T3Type;       //Topping3 sprite renderer
+
+
+    MenuCooked OrderCooked;         //Ticket cook level
+    MenuPastaType OrderPasta;       //Ticket pasta type
+    MenuSauce OrderSauce;           //Ticket sauce type
+    MenuToppings OrderToppings1;    //Ticket topping1 type
+    MenuToppings OrderToppings2;    //Ticket topping2 type
+    MenuToppings OrderToppings3;    //Ticket topping3 type
+    bool Topping1Exists, Topping2Exists, Topping3Exists;    //do each topping exist
+    public static int OrderNumber;  //Order number *Not currently used* 
+
+    public static MenuCooked MealCooked; //Meal cook level
+    public static MenuPastaType MealPasta;//Meal pasta type
+    public static MenuSauce MealSauce;//Meal sauce type
+    public static MenuToppings MealToppings1; //Meal topping1 type
+    public static MenuToppings MealToppings2;//Meal topping1 type
+    public static MenuToppings MealToppings3;//Meal topping1 type
+    public static bool MTopping1Exists, MTopping2Exists, MTopping3Exists; //do each topping exist
+
+    public GameObject ContinueButton; //Move to next scene button
+
+    //Start - code run immediatly
+    void Start()
+    {
+        //Preset order number
+        OrderNumber = 0;
+    }//Start
+
+    //Create order ticket and set values
+    public void GenerateTicket()
+    {
+        //Set base from points
+        points = 100;
+
+        //Set order number
+        OrderNumber++;
+
+        //Set pasta to cooked
+        OrderCooked = MenuCooked.perfect;
+
+        //Generate pasta type
+        int i = Random.Range(1, 3);
+        //Assignment pasta type
+        switch (i)
+        {
+            case 1:
+                OrderPasta = MenuPastaType.spaghetti; //Spag
+                break;
+            case 2:
+                OrderPasta = MenuPastaType.fetuccini; //Fet
+                break;
+        }//Switch - Generate pasta type
+
+        //Generate pasta sauce
+        i = Random.Range(0, 6);
+        //Assignment sauce type
+        switch (i)
+        {
+            case 0:
+                OrderSauce = MenuSauce.tomato; //tomato 
+                break;
+            case 1:
+                OrderSauce = MenuSauce.cheese; //cheese
+                break;
+            case 2:
+                OrderSauce = MenuSauce.pesto; //pesto
+                break;
+            case 3:
+                OrderSauce = MenuSauce.meatsauce; //meat
+                break;
+            case 4:
+                OrderSauce = MenuSauce.alfredo; //alfredo
+                break;
+            case 5:
+                OrderSauce = MenuSauce.spicy; //spicy
+                break;
+        }//Switch - Generate sauce type
+
+        //Generate Toppings
+        i = Random.Range(0, 4);
+        //Preset topping to existing
+        Topping1Exists = true;
+        //Assignment topping type
+        switch (i)
+        {
+            case 0:
+                OrderToppings1 = MenuToppings.cheese; //cheese
+                break;
+            case 1:
+                OrderToppings1 = MenuToppings.meatball; //meatball
+                break;
+            case 2:
+                OrderToppings1 = MenuToppings.vmeatball; //vmeatball
+                break;
+            case 3:
+                OrderToppings1 = MenuToppings.none; //bone
+                Topping1Exists = false;
+                break;
+        }//Switch - Generate topping type
+
+        //Generate Toppings 2
+        i = Random.Range(0, 4);
+        //Preset topping to existing
+        Topping2Exists = true;
+        //Assignment topping type
+        switch (i)
+        {
+            case 0:
+                OrderToppings2 = MenuToppings.cheese; //cheese
+                break;
+            case 1:
+                OrderToppings2 = MenuToppings.meatball;//meatball
+                break;
+            case 2:
+                OrderToppings2 = MenuToppings.vmeatball;//vmeatball
+                break;
+            case 3:
+                OrderToppings2 = MenuToppings.none;//No topping
+                Topping2Exists = false;
+                break;
+        }//Switch - Generate topping type
+
+        //Generate Toppings 3
+        i = Random.Range(0, 4);
+        //Preset topping to existing
+        Topping3Exists = true;
+        //Assignment topping type
+        switch (i)
+        {
+            case 0:
+                OrderToppings3 = MenuToppings.cheese;//cheese
+                break;
+            case 1:
+                OrderToppings3 = MenuToppings.meatball;//meatball
+                break;
+            case 2:
+                OrderToppings3 = MenuToppings.vmeatball;//vmeatball
+                break;
+            case 3:
+                OrderToppings3 = MenuToppings.none;//No topping
+                Topping3Exists = false;
+                break;
+        }//Switch - Generate topping type
+
+        //Rearrange topping
+        //if topping 1 doesnt exist trade with 2
+        if (!Topping1Exists && Topping2Exists)
+        {
+            OrderToppings1 = OrderToppings2;
+            OrderToppings2 = MenuToppings.none;
+            Topping1Exists = true;
+            Topping2Exists = false;
+        }//if
+
+        //if topping 1 doesnt exist trade with 3
+        if (!Topping1Exists && Topping3Exists)
+        {
+            OrderToppings1 = OrderToppings3;
+            OrderToppings3 = MenuToppings.none;
+            Topping1Exists = true;
+            Topping3Exists = false;
+        }//if
+
+        //if topping 1 doesnt exist trade with 2
+        if (!Topping2Exists && Topping3Exists)
+        {
+            OrderToppings2 = OrderToppings3;
+            OrderToppings3 = MenuToppings.none;
+            Topping2Exists = true;
+            Topping3Exists = false;
+        }//if
+
+ 
+      MealToppings1 = MenuToppings.none; //Meal topping1 type
+          MealToppings2 = MenuToppings.none;//Meal topping1 type
+        MealToppings3 = MenuToppings.none;//Meal topping1 type
+        MTopping1Exists = false;
+        MTopping2Exists = false; 
+         MTopping3Exists = false; //do each topping exist
+}//GenerateTicket
+
+    //CompareTicketMeal - tally up points 
+    public void CompareTicketMeal()
+    {
+        //If not perfectly cooked
+        if (MealCooked != OrderCooked)
+            points = points - 15;
+
+        //Is same 
+        if (OrderPasta != MealPasta)        
+            points = points - 10;
+
+        if (OrderSauce != MealSauce)
+            points = points - 10;
+
+        if (Topping1Exists)
+        {
+            if (OrderToppings1 != MealToppings1)
+            {
+                points = points - 15;           // deduct points if topping is wrong
+            }
+        }
+
+        if (Topping2Exists)
+        {
+            if (OrderToppings2 != MealToppings2)
+            {
+                points = points - 15;       // deduct points if topping is wrong
+            }
+        }
+
+        if (Topping3Exists)
+        {
+            if (OrderToppings3 != MealToppings3)
+            {
+                points = points - 15;       // deduct points if topping is wrong
+            }
+        }
+
+        Final_score.text = points.ToString();           // print the final score
+    }
+
+    public async void PrintTicket(bool Delay)
+    {
+        //Prints out pasta type squares on ticket
+        switch (OrderPasta)
+        {
+            case MenuPastaType.spaghetti: pastaType.sprite = SpagPicture;       
+                break;
+            case MenuPastaType.fetuccini:
+                pastaType.sprite = FetPicture;
+                break;
+        }
+
+        if(Delay)
+        {
+            await Task.Delay((int)2000);        // delays in between printing each menu option 
+            Debug.Log("Delay");
+        }
+
+        //Prints out sauce type squares on ticket
+        switch (OrderSauce)
+        {
+            case MenuSauce.tomato:
+                sauceType.sprite = TomatoPicture;
+                break;
+            case MenuSauce.cheese:
+                sauceType.sprite = CheesePicture;
+                break;
+            case MenuSauce.pesto:
+                sauceType.sprite = PestoPicture;
+                break;
+            case MenuSauce.meatsauce:
+                sauceType.sprite = MeatPicture;
+                break;
+            case MenuSauce.alfredo:
+                sauceType.sprite = AlfPicture;
+                break;
+            case MenuSauce.spicy:
+                sauceType.sprite = SpicyPicture;
+                break;
+        }
+
+        if (Delay)
+        {
+            await Task.Delay((int)2000);            // another delay
+            Debug.Log("Delay");
+        }
+
+        //Prints out first topping type square on ticket
+       
+            switch (OrderToppings1)
+            {
+                case MenuToppings.cheese:
+                    T1Type.sprite = ParmPicture;
+                    break;
+                case MenuToppings.meatball:
+                    T1Type.sprite = MeatballPicture;
+                    break;
+                case MenuToppings.vmeatball:
+                    T1Type.sprite = VmeatballPicture;
+                    break;
+                case MenuToppings.none:
+                    T1Type.sprite = null;
+                    break;
+            }
+        
+
+        if (Delay)
+        {
+            await Task.Delay((int)2000);                // who doesn't love a good delay feature?
+            Debug.Log("Delay");
+        }
+
+        //Prints out first topping type square on ticket
+       
+            switch (OrderToppings2)
+            {
+                case MenuToppings.cheese:
+                    T2Type.sprite = ParmPicture;
+                    break;
+                case MenuToppings.meatball:
+                    T2Type.sprite = MeatballPicture;
+                    break;
+                case MenuToppings.vmeatball:
+                    T2Type.sprite = VmeatballPicture;
+                    break;
+                case MenuToppings.none:
+                    T2Type.sprite = null;
+                    break;
+            }
+        
+
+        if (Delay)
+        {
+            await Task.Delay((int)2000);                        // delay
+            Debug.Log("Delay");
+        }
+
+        //Prints out first topping type square on ticket
+       
+            switch (OrderToppings3)
+            {
+                case MenuToppings.cheese:
+                    T3Type.sprite = ParmPicture;
+                    break;
+                case MenuToppings.meatball:
+                    T3Type.sprite = MeatballPicture;
+                    break;
+                case MenuToppings.vmeatball:
+                    T3Type.sprite = VmeatballPicture;
+                    break;
+                case MenuToppings.none:
+                    T3Type.sprite = null;
+                    break;
+
+            }
+        
+
+        if (Delay)
+        {
+            ContinueButton.SetActive(true);         // set the continue button active
+        }
+    }
+}
