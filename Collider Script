@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Colliders : MonoBehaviour
+{
+    public GameObject NextPos;          // The collider behind the current active collider 
+
+    void OnTriggerEnter2D(Collider2D col)           // executed when trigger is triggered
+    {
+        NextPos.SetActive(true);                // set next collider active
+    }
+}
