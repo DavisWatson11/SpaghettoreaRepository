@@ -1,0 +1,81 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ScoopScript : MonoBehaviour
+{
+    public GameObject SpagScooper;              // The game object for the spaghetti scooper
+    public Image Pasta;                         // the image sprite for the pasta object
+    public Sprite OverCookedSpag;               // sprite for the different levels of cooked spaghetti
+    public Sprite PerfectCookedSpag;
+    public Sprite UnderCookedSpag;
+    public Sprite OverCookedFet;                // sprite for the different levels of cooked fettuccine
+    public Sprite PerfectCookedFet;
+    public Sprite UnderCookedFet;
+
+    private Animator animator = null;          // scoop animator
+
+    public static bool PastaMade = false;               // if pasta has been made or not
+
+    private void Awake()            // executed before start
+    {
+        animator = GetComponent<Animator>();   // get the animator component
+    }
+    public void Scoop()             // executed when the scoop button is pressed
+    {
+        animator.Play("Steph'sScoop");              // play the animation
+        
+        PotScript.cookTimerStart = false;
+        PotScript.InPot = false;        // spaghetti has been scooped
+        PastaMade = true;
+
+        if (TimerScript.totalCookTime > 25.0f)          // check how cooked the pasta is
+        {
+            switch (PotScript.PastaInPot)           // using a switch incase we add more pastas in the future
+            {
+                case PotScript.PastaType.spaghetti:
+                    Pasta.sprite = OverCookedSpag; break;
+                case PotScript.PastaType.fettuccine:
+                    Pasta.sprite = OverCookedFet; break;
+            }
+            PotScript.CookedType = PotScript.LevelCooked.overcooked;            // set the values
+            OrderGenerator.MealCooked = OrderGenerator.MenuCooked.overcooked;
+        }
+        else
+        {
+            if (TimerScript.totalCookTime < 15.0f)          // undercooked
+            {
+                switch (PotScript.PastaInPot)
+                {
+                    case PotScript.PastaType.spaghetti:
+                        Pasta.sprite = UnderCookedSpag; break;
+                    case PotScript.PastaType.fettuccine:
+                        Pasta.sprite = UnderCookedFet; break;
+                }
+                PotScript.CookedType = PotScript.LevelCooked.undercooked;
+                OrderGenerator.MealCooked = OrderGenerator.MenuCooked.undercooked;
+            }
+            else            // perfectly cooked
+            {
+                switch (PotScript.PastaInPot)
+                {
+                    case PotScript.PastaType.spaghetti:
+                        Pasta.sprite = PerfectCookedSpag; break;
+                    case PotScript.PastaType.fettuccine:
+                        Pasta.sprite = PerfectCookedFet; break;
+                }
+                PotScript.CookedType = PotScript.LevelCooked.perfect;
+                OrderGenerator.MealCooked = OrderGenerator.MenuCooked.perfect;
+            }
+        }
+        Pasta.color = new Color32(255, 255, 255, 255); // make visible
+    }
+
+    public void OnAnimationEnd()                // executed when the animation ends
+    {
+        Debug.Log("Animation End");             // testing purposes
+       SpagScooper.SetActive(false);            // make the scoop go "poof" (disappear)
+        
+    }
+}
