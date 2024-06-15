@@ -1,0 +1,50 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class TimerScript : MonoBehaviour
+{
+    public float targetTime = 20.0f;        // the starting time of the timer
+    public bool timerStart = false;         // whether or not the timer has started yet
+    public TMP_Text buttonText;             // the text on the timer button
+    public AudioClip Beep;                  // plays beep sound when ran
+    public AudioSource Source;              // the source of the beep sound
+    public static float totalCookTime = 0.0f;       // the total cook time of the pasta (ignores whether or not the timer has been set)
+
+    // Start is called before the first frame update
+    public void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    public void Update()
+    {
+        if (timerStart)     // check if the user started the timer yet
+        {
+            targetTime -= Time.deltaTime;           // update time each frame
+            buttonText.SetText(targetTime.ToString("#.0"));     // prints the current time rounded to 1 decimal place
+            if (targetTime <= 0.0f)             // check if time is at 0
+            {
+                timerEnded();           // if timer is ended, run the function
+            }
+        }
+    }
+
+    public void timerEnded()        // function gets executed when timer is ended
+    {
+        Source.PlayOneShot(Beep);               // play the beeping sound when timer is done
+        targetTime = 0.0f;                      // set the displayed time to 0
+        timerStart = false;                     // timer isn't started
+        buttonText.SetText("Click to Start Timer");             // reset values
+        targetTime = 30.0f;
+    }     // timerEnded()
+
+    public void WhenClicked()                    // executed when the timer button is clicked
+    {
+        Debug.Log("Button Clicked");            // error checking
+        timerStart = !timerStart;               
+    }
+}
