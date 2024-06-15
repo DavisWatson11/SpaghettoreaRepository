@@ -1,0 +1,56 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MoveCamera : MonoBehaviour
+{
+   public static int HowManyChanges = 0; //How many times the scene has changed
+
+   public void ContinueButton()             // executed when continue button is clicked
+   {
+        switch (HowManyChanges)
+        {
+            case 0: //Ticket to Cook station
+                MoveToCook();
+                HowManyChanges++;
+                break;
+            case 1: //Cook to Topping station
+                MoveToTopping();
+                HowManyChanges++;
+                break;
+            case 2: //Topping to Serve station
+                MoveToServe();
+                HowManyChanges++;
+                break;
+            case 3: //Topping to Serve station
+                MoveToOrder();
+                HowManyChanges = 0;         // reset values for next time
+                break;
+        }
+   }
+
+   public void MoveToOrder()            // moves to order station
+   {
+        transform.position = new Vector3(40, 60, -200);
+   }
+
+   public void MoveToCook()             // moves to cook stationn
+   {
+        transform.position = new Vector3(100, 60, -200);
+   }
+
+    public void MoveToTopping()         // movevs to topping station
+    {
+        transform.position = new Vector3(40, 20, -200);
+    }
+
+    public void MoveToServe()           // moves to serving station
+    {
+        transform.position = new Vector3(100, 20, -200);
+    }
+
+    public void MoveToTicket()          // moves to ticket
+    {
+        transform.position = new Vector3(40, 100, -200);
+    }
+}
