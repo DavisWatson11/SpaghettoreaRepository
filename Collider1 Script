@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Collider1 : MonoBehaviour
+{
+    [SerializeField] GameObject Pos2;                   // the game object for the potential position of another customer (future project)
+    [SerializeField] GameObject OrderButton;            // the object for the order button
+
+    void OnTriggerEnter2D(Collider2D col)           // function executed when trigger is entered
+    {   
+        Pos2.SetActive(true);                   // set the next collider for potential next customer
+        OrderButton.SetActive(true);                // set order button to true
+        col.name = "CustomerOrdering";
+    }
+}
